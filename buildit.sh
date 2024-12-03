@@ -6,3 +6,4 @@ if [ -z "$FEDORA_VERSION" ]; then
    exit 1
 fi
 podman run --volume "$PWD:/k:z" --rm -it docker.io/library/fedora:"${FEDORA_VERSION}" /k/rpm/buildrpm.sh
+mv rpm/*rpm .
