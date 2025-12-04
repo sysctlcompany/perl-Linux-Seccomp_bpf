@@ -62,8 +62,15 @@ CODE:
         perror("failed to set PR_ST_NO_NEW_PRIVS:");
         exit(errno);
     }
+
+    int die_or_log = SCMP_ACT_KILL;
+    char* seccomp_mode = getenv("SYSCTL_SECCOMP_LOG_ONLY");
+    if (seccomp_mode != NULL && strncmp(seccomp_mode, "1", 1) == 0) {
+        die_or_log = SCMP_ACT_LOG;
+    }
+
     // libseccomp initialization
-    ctx = seccomp_init(SCMP_ACT_KILL);
+    ctx = seccomp_init(die_or_log);
     if (ctx == NULL) {
         fprintf(stderr, "seccomp_init failed\n");
         exit(-1);
